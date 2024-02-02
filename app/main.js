@@ -8,7 +8,7 @@ let lastTimestamp = 0;
 
 document.addEventListener("DOMContentLoaded", setup);
 
-function setup(timestamp) {
+function setup() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth;
