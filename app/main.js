@@ -1,36 +1,40 @@
-import { renderPersonaje } from "./render.js";
+import * as render from "./render.js";
 import * as utils from "./utils.js";
 import { personaje, juego } from "./config.js";
 
 let canvas;
 let ctx;
+let lastTimestamp = 0;
 
 document.addEventListener("DOMContentLoaded", setup);
 
-function setup() {
+function setup(timestamp) {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  console.log("height", canvas.height, "width", canvas.width);
-
-  dibujar();
+  console.log("height", canvas.height, "width", canvas.width);  
+  window.requestAnimationFrame(dibujar);
+  
 }
 
-function dibujar() {
-  // Limpiar el canvas
-  setTimeout(() => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // Dibujar un cuadrado en la posición actual
-  renderPersonaje(
-    ctx,
-    utils.generarNumeros(canvas.width - personaje.tamano),
-    utils.generarNumeros(canvas.height - personaje.tamano),
-    personaje.tamano,
-    personaje.color
-  );
-  }, juego.espera);
+function dibujar(timestamp) {
+    const dt = timestamp - lastTimestamp;
+    render.titulo(ctx, canvas, "PÉGALE AL CUADRO")   
+           
+   
 
-  // Solicitar el próximo frame de animación
-  window.requestAnimationFrame(dibujar);
+    if (dt >= juego.espera) {        
+        ctx.clearRect(0, 50, canvas.width, canvas.height);                
+        
+        render.presonaje(
+          ctx,
+          utils.generarNumeros( 50, canvas.width - personaje.tamano),
+          utils.generarNumeros( 50, canvas.height - personaje.tamano),
+          personaje.tamano,
+          personaje.color
+        );
+        lastTimestamp = timestamp;
+    }
+    window.requestAnimationFrame(dibujar);  
 }
